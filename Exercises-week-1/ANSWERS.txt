@@ -1,3 +1,12 @@
 Exercise 1.1
 	1) The final values are lower than 20000000
-	2) We get the correct values. The fact that there is a change of failureis the same of the failure itself, and therefore i do not consider the programm correct.
+	2) We get the correct values. The fact that there is a change of failure is the same of the failure itself, and therefore i do not consider the programm correct.
+	3)This makes no difference since the operations taken are the same.
+	4)The result is not the expected. Since both methods change the state of the class (variable count) the changes in that variable must be synchronized or the variable count should be guarded by the same lock.
+	5) 	i) Result: 10018577, 10033476, 10012910, 6446218, 9294148
+			Explanation: The result is relied on whether while the A thread read the value while another thread B writes to it. 
+		ii) 10020877, 10016894, 10008836, 10013727, 10013721 
+			Explanation: The statements defined in , thus each time
+		iii) 9963073, 9981024, 9983667, 9991770 
+		iv) 10000000
+	  
