@@ -1,33 +1,33 @@
 Exercise 1.1
-	1) The final values are lower than 20000000
-	2) We get the correct values. The fact that there is a change of failure is the same of the failure itself, and therefore i do not consider the programm correct.
-	3)This makes no difference since the operations taken are the same.
-	4)The result is not the expected. Since both methods change the state of the class (variable count) the changes in that variable must be synchronized or the variable count should be guarded by a lock.
-	5) 	i) Result: 10018577, 10033476, 10012910, 6446218, 9294148
-			Explanation: The result is relied on whether while the A thread read the value while another thread B writes to it. 
-		ii) 10020877, 10016894, 10008836, 10013727, 10013721 
-			Explanation: The statements defined in decrement is locked, thus each time that the thread decrements the counter the counter counter variable is locked and cannot be changed from the increment method, thus all the changes made by the decrement method will be visible and atomic by increment method.
-		iii) 9963073, 9981024, 9983667, 9991770 
-			Explanation: The opposite from ii)
-		iv) 10000000 
-			Explanation: Every operation is atomic, and changes to the couter will be visible to all threads.
+	1) The final values are always higher than 10000000 lower than 20000000.
+	2) We get the correct values. The fact that there is a change of failure is the same of the failure itself, and therefore we do not consider the program correct.
+	3) This makes no difference since the operations taken are the same.
+	4) The result is not the expected. Since both methods change the state of the class (variable count) the changes in that variable must be synchronized or the variable count should be guarded by a lock.
+	5) i) Result: 10018577, 10033476, 10012910, 6446218, 9294148
+		Explanation: The result is relied on whether while the A thread read the value while another thread B writes to it. 
+	   ii) 10020877, 10016894, 10008836, 10013727, 10013721
+		Explanation: The statements defined in decrement is locked, thus each time that the thread decrements the counter the counter counter variable is locked and cannot be changed from the increment method, thus all the changes made by the decrement method will be visible and atomic by increment method.
+	   iii) 9963073, 9981024, 9983667, 9991770
+		Explanation: The opposite from ii)
+	   iv) 10000000
+		Explanation: Every operation is atomic, and changes to the couter will be visible to all threads.
 Exercise 1.2
-	1) The scenario can be arised when both threads print print dash or bar
-	2) The reason why this can be prevented by using synchronized is because  each thread that invokes the print method must hold a lock preventing other threads to print.
-	3) Inside the print: 
+	1) The scenario can arise when both threads print dash or bar
+	2) The reason why this can be prevented by using synchronized is because each thread that invokes the print method must hold a lock preventing other threads to print.
+	3) Inside the print:
 		synchronized(this){
                         System.out.print("-");
                         try{Thread.sleep(50);} catch (InterruptedException e){}
                         System.out.print("|");
                 }
-	4) Inside the print: 
+	4) Inside the print:
 		 synchronized(Printer.class){
                         System.out.print("-");
                         try{Thread.sleep(50);} catch (InterruptedException e){}
                         System.out.print("|");
                 }
 Exercise 1.3
-	1) It loops forever
-	2) It stops
+	1) It loops forever.
+	2) It stops.
 	3) It loops. We should not rely on that since the changes made by main thread may not be visible by other threads.
-	4) The volatile ensures visibility, since any change is visible to other threads resulting the loop to terminate. 
+	4) The volatile ensures visibility, since any change is visible to other threads resulting the loop to terminate.
