@@ -2,17 +2,17 @@ Exercise 1.1
 	1) The final values are lower than 20000000
 	2) We get the correct values. The fact that there is a change of failure is the same of the failure itself, and therefore i do not consider the programm correct.
 	3)This makes no difference since the operations taken are the same.
-	4)The result is not the expected. Since both methods change the state of the class (variable count) the changes in that variable must be synchronized or the variable count should be guarded by a lock.
+	4)The result is not the expected. Since both methods change the state of the class (variable count) the operations should be atomic.
 	5) 	i) Result: 10018577, 10033476, 10012910, 6446218, 9294148
 			Explanation: The result is relied on whether while the A thread read the value while another thread B writes to it. 
 		ii) 10020877, 10016894, 10008836, 10013727, 10013721 
-			Explanation: The statements defined in decrement is locked, thus each time that the thread decrements the counter the counter counter variable is locked and cannot be changed from the increment method, thus all the changes made by the decrement method will be visible and atomic by increment method.
+			Explanation: The statements defined in decrement is locked, thus each time that the thread decrements the counter the counter variable is locked and cannot be changed from the increment method, thus all the changes made by the decrement method will be visible and atomic.
 		iii) 9963073, 9981024, 9983667, 9991770 
 			Explanation: The opposite from ii)
 		iv) 10000000 
 			Explanation: Every operation is atomic, and changes to the couter will be visible to all threads.
 Exercise 1.2
-	1) The scenario can be arised when both threads print print dash or bar
+	1) The scenario can be arised when both threads print dash or bar
 	2) The reason why this can be prevented by using synchronized is because  each thread that invokes the print method must hold a lock preventing other threads to print.
 	3) Inside the print: 
 		synchronized(this){
@@ -33,11 +33,35 @@ Exercise 1.3
 	4) The volatile ensures visibility, since any change is visible to other threads resulting the loop to terminate.
 Exercise 1.4
 	1) Sequential result:    3001134
+		range 50_000_000
 		real	1m13.903s
 		user	1m13.904s
 		sys	0m0.012s
 	2) Parallel10 result:    3001134
+		range 50_000_000
 		real	0m36.489s
 		user	2m21.860s
 		sys	0m0.060s
- 
+	3) Parallel2 result: 663685 
+		range 9_999_999
+		without synhcronization	
+		real	0m5.473s
+		user	0m8.916s
+		sys	0m0.008s
+	4) It does not matter, since the main thread waits for the other threads to finish, threads that have invoked only the increment method (synchronized), making the changes in the counter visible to any other thread including the main thread. However, according to the Effictive Java book we should both lock get and set methods.
+Exercise 1.5)
+	1) 1473514.000000, 1569806.000000. The class is not thread-safe.
+	2) The reason that the class is not thread safe is because the statements defined in the methods are guarded by different locks. For static methods the Mystery.class runtime object is used while in an instance method the "this" used.
+	3) In order to make the class thread safe we need to lock the statements that change the state of the class with the same lock. Thus, the instance method can be locked using the Mystery.class runtime object.
+		public void addInstance(double x) {
+        		synchronized(Mystery.class){
+                		sum += x;
+        		}
+  		}
+Exercise 1.6
+	1) I would synchronized all the methods.
+	2) They do not scale well since there will be observed perfomance issues. Since each of the synchronized method is performed by a thread no other thread can use the methods guarded by the same lock("this").
+	3) It would not provide thread-safety since statements that affect the state of the class are not atomic, since they are guarded by a different locks. Thus there is change that a thread A might observe the list in inconsistent state. As far as visibility is concerned, i think that the synchronized keyword will make visible any change to the state to any other thread.
+Exercise 1.7
+	1) A thread can read from and write to totalSize variable by using the static method totalSize() and add() method. Thus these statements should be locked by the same lock.   
+	2) We shoud first make the DoubleArrayList class thread safe, since the state of the HashSet is also affected by the object that refers to. Code paths that have access to items, and size variable should be locked using the same lock since both of them participate in the same invariant of the class. 
