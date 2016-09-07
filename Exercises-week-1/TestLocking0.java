@@ -26,8 +26,10 @@ class Mystery {
     sum += x;
   }
 
-  public synchronized void addInstance(double x) {
-    sum += x;
+  public void addInstance(double x) {
+	synchronized(Mystery.class){ 
+    		sum += x;
+	}
   }
 
   public static synchronized double sum() {

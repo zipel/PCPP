@@ -20,12 +20,12 @@ class DoubleArrayList {
   private int size = 0;
 
   // Number of items in the double list
-  public int size() {
+  public synchronized int size() {
     return size;
   }
 
   // Return item number i, if any
-  public double get(int i) {
+  public synchronized double get(int i) {
     if (0 <= i && i < size) 
       return items[i];
     else 
@@ -33,7 +33,7 @@ class DoubleArrayList {
   }
 
   // Add item x to end of list
-  public boolean add(double x) {
+  public synchronized boolean add(double x) {
     if (size == items.length) {
       double[] newItems = new double[items.length * 2];
       for (int i=0; i<items.length; i++)
@@ -46,7 +46,7 @@ class DoubleArrayList {
   }
 
   // Replace item number i, if any, with x
-  public double set(int i, double x) {
+  public synchronized double set(int i, double x) {
     if (0 <= i && i < size) {
       double old = items[i];
       items[i] = x;
@@ -56,7 +56,7 @@ class DoubleArrayList {
   }
 
   // The double list formatted as eg "[3.2, 4.7]"
-  public String toString() {
+  public synchronized String toString() {
     StringBuilder sb = new StringBuilder("[");
     for (int i=0; i<size; i++)
       sb.append(i > 0 ? ", " : "").append(items[i]);
