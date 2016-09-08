@@ -30,7 +30,7 @@ Exercise 1.3
 	1) It loops forever
 	2) It stops
 	3) It loops. We should not rely on that since the changes made by main thread may not be visible by other threads.
-	4) The volatile ensures visibility, since any change is visible to other threads resulting the loop to terminate.
+	4) The JVM specification ensures both fetching and writing operations to be atomic for int variables. Thus, by using the volatile keyword is ensured that any change in the variable will be visible by any other thread.
 Exercise 1.4
 	1) Sequential result:    3001134
 		range 50_000_000
@@ -48,10 +48,10 @@ Exercise 1.4
 		real	0m5.473s
 		user	0m8.916s
 		sys	0m0.008s
-	4) It does not matter, since the main thread waits for the other threads to finish, threads that have invoked only the increment method (synchronized), making the changes in the counter visible to any other thread including the main thread. However, according to the Effictive Java book we should both lock get and set methods.
+	4) It does not matter whether the get method is syncronized, in that case. The reason is that the get method is invoked only by the main thread and once the other thread will have stopped their tasks, thus there will be no concurrent access to the state of the class by the time the get method is invoked. And since the statements in the increment methods are synchronized any change to the count will be visible to all threads. However, in general both get() and set() methods should be synchronized according to Effictive Java Item 66. 
 Exercise 1.5)
 	1) 1473514.000000, 1569806.000000. The class is not thread-safe.
-	2) The reason that the class is not thread safe is because the statements defined in the methods are guarded by different locks. For static methods the Mystery.class runtime object is used while in an instance method the "this" used.
+	2) The reason that the class is not thread safe is because the statements defined in the methods are guarded by different locks. For static methods the Mystery.class runtime object is used while in an instance method the "this" is used.
 	3) In order to make the class thread safe we need to lock the statements that change the state of the class with the same lock. Thus, the instance method can be locked using the Mystery.class runtime object.
 		public void addInstance(double x) {
         		synchronized(Mystery.class){
@@ -59,9 +59,54 @@ Exercise 1.5)
         		}
   		}
 Exercise 1.6
-	1) I would synchronized all the methods.
-	2) They do not scale well since there will be observed perfomance issues. Since each of the synchronized method is performed by a thread no other thread can use the methods guarded by the same lock("this").
+	1) I would synchronize all the methods.
+	2) They do not scale well since there will be observed perfomance issues. In case of a synchronized method use by a thread no other thread can use the methods guarded by the same lock("this").
 	3) It would not provide thread-safety since statements that affect the state of the class are not atomic, since they are guarded by a different locks. Thus there is change that a thread A might observe the list in inconsistent state. As far as visibility is concerned, i think that the synchronized keyword will make visible any change to the state to any other thread.
 Exercise 1.7
 	1) A thread can read from and write to totalSize variable by using the static method totalSize() and add() method. Thus these statements should be locked by the same lock.   
-	2) We shoud first make the DoubleArrayList class thread safe, since the state of the HashSet is also affected by the object that refers to. Code paths that have access to items, and size variable should be locked using the same lock since both of them participate in the same invariant of the class. 
+	2) We shoud first make the DoubleArrayList class thread safe, since the state of the HashSet is also affected by the object that refers to. Code paths that have access to items, and size variable should be locked using the same lock since both of them participate in the same invariant of the class. Later we can make the allLists immutable.
+Exercise 1.8)
+	1) The 'value' variable is not the expected because the statements defined inside to the static methods are guarded by different locks; the runtime class object and therefore the operations are not atomic.
+	2) We can make the changes:
+		class MysteryA {
+  			protected static AtomicLong count = new AtomicLong(0);
+
+  			public static void increment() {
+        			count.incrementAndGet();
+  			}
+
+  			public static long get() {
+    				return count.get();
+  			}
+		}
+
+		class MysteryB extends MysteryA {
+  			public static void increment4() {
+   	 		count.addAndGet(4) ;
+  			}
+		}
+	 or:
+		class MysteryA{
+			protected static long count = 0;
+			protected static Object lock = new Object();
+			
+			public static void increment(){
+				synchronized(lock){
+					count++;
+				}
+			}
+			public static long get(){
+				synchronized(lock){
+					return count;
+				}
+			}
+		}
+		class MysteryB extends MysteryA {
+			public static void increment4(){
+				syncronized(lock){
+					count += 4;
+				}
+			}
+		}
+
+

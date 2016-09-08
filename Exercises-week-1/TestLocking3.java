@@ -1,6 +1,6 @@
 // For week 1
 // sestoft@itu.dk * 2016-09-01
-
+import java.util.concurrent.atomic.AtomicLong;
 public class TestLocking3 {
   public static void main(String[] args) {
     final int counts = 10_000_000;
@@ -22,19 +22,18 @@ public class TestLocking3 {
 }
 
 class MysteryA {
-  protected static long count = 0;
-
-  public static synchronized void increment() {
-    count++;
+  protected static AtomicLong count = new AtomicLong(0);
+  public static void increment() {
+	count.incrementAndGet();
   }
 
-  public static synchronized long get() { 
-    return count; 
+  public static long get() { 
+    return count.get(); 
   }
 }
 
 class MysteryB extends MysteryA {
-  public static synchronized void increment4() {
-    count += 4;
+  public static void increment4() {
+    count.addAndGet(4) ;
   }
 }
