@@ -1,3 +1,6 @@
+--------------------------------------------------------------------------------------
+Note:The hand-in in group 8 is identical to that in group 70, because of collaboration.
+--------------------------------------------------------------------------------------
 Exercise 1.1
 	1) The final values are lower than 20000000
 	2) We get the correct values. The fact that there is a change of failure is the same of the failure itself, and therefore i do not consider the programm correct.
