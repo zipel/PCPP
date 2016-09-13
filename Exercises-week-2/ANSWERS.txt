@@ -1,0 +1,7 @@
+Exercise 2.1
+	1) 	count = 0;
+		for( int i =0; p<=4999999; i++)
+			count += countFactors(i);
+		Total number: 18_703_729
+		Time:  7_801_637_008 millis
+
