@@ -1,6 +1,6 @@
 import java.util.concurrent.atomic.AtomicInteger;
 public class TestCountFactorsMyAtomicInteger{
-	final static AtomicInteger counter = new AtomicInteger();
+	static final MyAtomicInteger counter = new MyAtomicInteger();
 	public static void main(String[] args){
 		long start = System.nanoTime();
 		parallelN(10, 5_000_000);

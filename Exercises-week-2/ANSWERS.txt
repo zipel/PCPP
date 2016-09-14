@@ -1,14 +1,38 @@
 Exercise 2.1
-		1)	
-				count = 0;
-			efor( int i =0; p<=4999999; i++)
-						count += countFactors(i);
-				Total number: 18_703_729
-				Time:  7_801_637_008 millis
-		2)  	See SRC/ MyAtomicInteger.java
-		3)  	Time: 4_778_947_000
-				Total number: 18_703_729	
+		1)	count = 0;
+			for(int i =0; p<=4999999; i++)
+				count += countFactors(i);
+				
+			Total number: 18_703_729
+			Time:  7_801_637_008 millis
+		2)	See SRC/ MyAtomicInteger.java
 
-		4) The progrom would be broken since the volatile does not ensures that the values observed in the counter will not be stale.
-		5) Time:4_813_721_000
-		        18_703_729
+		3)  Time: 4_778_947_000
+			Total number: 18_703_729	
+
+		4)	The progrom would be broken since the volatile does not ensure that the values observed in the counter will not be stale.
+
+		5)	Time:4_813_721_000
+			Total number: 18_703_729
+
+Exercise 2.2
+		1) The VolatileCachingFactorizer delegates its thread safety to OneValueCache,
+			an immutable class(also thread-safe by definition). Thus the volatile keyword
+			is needed in order to ensure visibility among threads that have access to it.
+		2) Respects the specification for making the class immutable and thus thread-safe.
+	
+Exercise 2.3
+		1)  The getCount(); and increment()  should be synchronized to eliminate race conditions, due to 
+			read-modify-write operation counts[bit] = count[bit] + 1. The getSpan() method does not need
+			to be synchronized since the value of the array will not change during its execution.
+		2) See SRC/ TestCountFactorsHistogram2.java 
+		3) See SRC/ TestCountFactorsHistogram3.java
+		4) See SRC/ TestCountFactorsHistogram4.java
+		5) For Histogram2  synchronization of the method is required returning a copy of the array. It gives the snapsot of bins 
+			 at the time that the getBins() was called. For Histogram3 the get() method will be invoked for every AtomicInteger
+			 stored in the array. In that case the returned array is a snapsot as well ,with the only difference that there is a change not
+			 to return the snapsot of the array state as it was when the getBins() was invoked since we do now lock the whole array. 
+			 For instance, when the first element is copied another thread may change the value of the other elements in the array.
+			 In case of Histogram3 the whole array is locked when we copy its value returning a snapsot.
+			 See SRC/TestCountFactorsHistogram2.java TestCountFactorsHistogram3.hava TestCountFactorsHistogram4.java
+		6)
