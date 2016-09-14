@@ -128,8 +128,7 @@ class Memoizer2 <A, V> implements Computable<A, V> {
  * @author Brian Goetz and Tim Peierls
  */
 class Memoizer3<A, V> implements Computable<A, V> {
-  private final Map<A, Future<V>> cache 
-    = new ConcurrentHashMap<A, Future<V>>();
+  private final Map<A, Future<V>> cache = new ConcurrentHashMap<>(); 
   private final Computable<A, V> c;
   
   public Memoizer3(Computable<A, V> c) { this.c = c; }
@@ -177,15 +176,12 @@ class Memoizer4<A, V> implements Computable<A, V> {
   public V compute(final A arg) throws InterruptedException {
     Future<V> f = cache.get(arg);
     if (f == null) {
-      Callable<V> eval = new Callable<V>() {
-	  public V call() throws InterruptedException {
-	    return c.compute(arg);
-      }};
+      Callable<V> eval = () ->  c.compute(arg);
       FutureTask<V> ft = new FutureTask<V>(eval);
       f = cache.putIfAbsent(arg, ft);
       if (f == null) { 
-	f = ft; 
-	ft.run();
+		f = ft; 
+		ft.run();
       }
     }
     try { return f.get(); } 
@@ -220,9 +216,10 @@ class Memoizer5<A, V> implements Computable<A, V> {
     final AtomicReference<FutureTask<V>> ftr = new AtomicReference<FutureTask<V>>();
     Future<V> f = cache.computeIfAbsent(arg, (A argv) -> {
 	  Callable<V> eval = new Callable<V>() {
-	      public V call() throws InterruptedException {
-		return c.compute(argv);
-	      }};
+	      	public V call() throws InterruptedException {
+			return c.compute(argv);
+			}
+	  };
 	  ftr.set(new FutureTask<V>(eval));
 	  return ftr.get();
       });
@@ -261,7 +258,7 @@ class Memoizer <A, V> implements Computable<A, V> {
     while (true) {
       Future<V> f = cache.get(arg);
       if (f == null) {
-	Callable<V> eval = new Callable<V>() {
+		Callable<V> eval = new Callable<V>() {
 	    public V call() throws InterruptedException {
 	      return c.compute(arg);
 	    }
@@ -311,4 +308,22 @@ class Memoizer <A, V> implements Computable<A, V> {
     else
       throw new IllegalStateException("Not unchecked", t);
   }
+}
+class Memoizer0 <A, V> implements Computable<A, V> {
+	private final ConcurrentHashMap<A, V> cache = 
+		new ConcurrentHashMap<>();
+	private final Computable<A, V> c;
+
+	public Memoizer0(Computable<A, V> c){
+		this.c = c;
+	}
+	public V compute(final A arg){ 
+	 return	cache.computeIfAbsent(arg , (A a) -> {
+			try{
+				return c.compute(a);
+			}catch(InterruptedException e){
+				throw new RuntimeException(e);
+			}
+		});
+	}
 }

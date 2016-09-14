@@ -1,3 +1,9 @@
+/**Note: The hand-in in group 8 is identical to that in group 70, because of collaboration.
+   Note: In case that the java file does not compile is might be due to dependency issues.
+   		If you compile the exercises sequentially there will be no problem
+
+		Thank you
+*/
 Exercise 2.1
 		1)	count = 0;
 			for(int i =0; p<=4999999; i++)
@@ -17,7 +23,7 @@ Exercise 2.1
 
 Exercise 2.2
 		1) The VolatileCachingFactorizer delegates its thread safety to OneValueCache,
-			an immutable class(also thread-safe by definition). Thus the volatile keyword
+			an immutable class(thread-safe by construction). Thus the volatile keyword
 			is needed in order to ensure visibility among threads that have access to it.
 		2) Respects the specification for making the class immutable and thus thread-safe.
 	
@@ -28,11 +34,65 @@ Exercise 2.3
 		2) See SRC/ TestCountFactorsHistogram2.java 
 		3) See SRC/ TestCountFactorsHistogram3.java
 		4) See SRC/ TestCountFactorsHistogram4.java
-		5) For Histogram2  synchronization of the method is required returning a copy of the array. It gives the snapsot of bins 
+		5) For Histogram2 synchronization of the method is required when returning a copy of the array. It gives the snapsot of bins 
 			 at the time that the getBins() was called. For Histogram3 the get() method will be invoked for every AtomicInteger
 			 stored in the array. In that case the returned array is a snapsot as well ,with the only difference that there is a change not
-			 to return the snapsot of the array state as it was when the getBins() was invoked since we do now lock the whole array. 
-			 For instance, when the first element is copied another thread may change the value of the other elements in the array.
-			 In case of Histogram3 the whole array is locked when we copy its value returning a snapsot.
+			 to return the snapsot of the array state as it was when the getBins() was invoked since we do not lock the whole array. 
+			 For instance, when the first element is copied another thread may change the value of next elements in the array.
+			 In case of Histogram4 the whole array is locked when we copy its value returning a snapsot.
 			 See SRC/TestCountFactorsHistogram2.java TestCountFactorsHistogram3.hava TestCountFactorsHistogram4.java
-		6)
+		6) See SRC/ TestCountFactorsHistogram5.java
+Exercise 2.4
+		1) See SRC/ExerciseFactorizer.java
+		2) See SRC/ExerciseFactorizer.java
+			class Memoizer1
+			getCount	115000
+			real	0m24.149s
+			user	0m24.988s
+			sys		0m0.324s
+		3) class Memoizer2
+			141024
+
+			real	0m19.822s
+			user	0m52.644s
+			sys	0m0.244s
+			Explanation: The calls to the factorizer this time are more.
+			The reason is that a thread might get a null value for a computation that
+			is currently running, resulting calling the factorizer again.
+		4)	class Memoizer3
+			115966
+
+			real	0m13.756s
+			user	0m33.100s
+			sys	0m0.936s
+			Explanation: In this case the calls are fewer since now first
+			we register the computation(using Future) and then we evaluate it
+		5)  class Memoizer4
+			115000
+
+			real	0m13.370s
+			user	0m31.224s
+			sys	0m0.836s
+			Explanation: It seems to be close to optimal(i run this 3 times) 
+			because now we also check if in the meantime of creating a future
+			for a computation another thread has put a future for the
+			same computation.
+		6)  class Memoizer5
+			115000
+
+			real	0m13.557s
+			user	0m32.772s
+			sys	0m0.892s
+			Explanation: The lambda is only executed in case that there is no
+			computation running for the given long, minimizing the time
+			between checks.
+		7)  class Memoizer0
+			115000
+
+			real	0m13.381s
+			user	0m37.112s
+			sys	0m0.376s
+			Explanation: The computation takes place only when key is absent,
+			locking the key -> value reference at the very beginning when the
+			check takes place. Thus, only the threads that lookup the given 
+			key will be synchronized minimizing the time needed  and  calls to factorizer.
