@@ -1,3 +1,7 @@
+---------------------------------------------------------------------------------------
+Note:The hand-in in group 8 is identical to that in group 70, because of collaboration.
+---------------------------------------------------------------------------------------
+
 Exercise 3.1
 	1) public FunList<T> remove(T x){
 			return remove(x, this.first, new FunList<T>());
