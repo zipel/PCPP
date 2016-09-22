@@ -106,7 +106,15 @@ Exercise 3.3)
 					.map(toL.andThen(mpch))
 					.reduce(0, (i, m) -> i + m.getOrDefault('e', 0), (i1, i2) -> i1 + i2);
 
-		11) readWords(filename)
+		11) readWords(filename).collect(Collectors.groupingBy(TestWordStream::letters));
+			real	0m15.809s
+			user	0m20.956s
+			sys		0m0.180s
+
+		12) readWords(filename).parallel().collect(Collectors.groupingBy(TestWordStream::letters));
+			real	1m45.328s
+			user	1m59.020s
+			sys	0m0.540s
 
 Exercise 3.4)
 		1) System.out.print(IntStream.range(1, 999_999_999).mapToDouble(x -> 1.0/x).sum()) = 21.300481500347942;

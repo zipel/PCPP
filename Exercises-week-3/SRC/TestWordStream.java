@@ -1,6 +1,6 @@
 // Week 3
 // sestoft@itu.dk * 2015-09-09
-
+import java.util.ArrayList;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -18,7 +18,8 @@ import java.util.function.Function;
 import java.util.stream.Collector;
 import java.util.stream.IntStream;
 import java.util.stream.DoubleStream;
-
+import java.util.function.BinaryOperator;
+import java.util.Collection;
 public class TestWordStream {
   public static void main(String[] args) {
     String filename = "../words.txt";
@@ -33,6 +34,8 @@ public class TestWordStream {
 //	System.out.print(i);
 	//Map<Integer, List<String>> map = readWords(filename).collect(Collectors.groupingBy(s -> s.length()));
 	Stream<String> stream = readWords(filename);
+	Map<Map<Character, Integer>, List<String>> mp =  stream.collect(Collectors.groupingBy(TestWordStream::letters));
+	
 
 //	Collector<String, ?, Integer> coll =  Collectors.summingInt(String::length);
 //	Map<Integer, Integer> map1 = stream.collect(Collectors.groupingBy(String::length, coll));
@@ -64,6 +67,13 @@ public class TestWordStream {
     } catch (IOException exn) { 
       return Stream.<String>empty();
     }
+  }
+
+  public static <T> Collection<T> conc(Collection<T> a, Collection<T> b){
+  		ArrayList<T> arrl = new ArrayList<>();
+		arrl.addAll(a);
+		arrl.addAll(b);
+		return arrl;
   }
 
   public static boolean isPalindrome(String s) {
