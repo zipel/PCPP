@@ -1,0 +1,145 @@
+Exercise 3.1
+	1) public FunList<T> remove(T x){
+			return remove(x, this.first, new FunList<T>());
+		}
+		protected static <T> FunList<T> remove(T x, Node<T> node, FunList<T> res){
+			return node == null ? res : ( x.equals(node.item) ? remove(x, node.next, res) : remove(x, node.next, cons(node.item, res)) );
+		}
+
+	2) public int count(Predicate<T> p){
+			return count(p, this.first, 0);
+		}
+		
+		protected <T> int count(Predicate p, Node<T> node, int res){
+			return node == null ? res : ( p.test(node.item) ? count(p, node.next, res++) : count(p, node.next, res));
+		}
+	3) public FunList<T> filter(Predicate p){
+			Node<T> n = first; FunList<T> l = new FunList<>();
+			while(n != null){
+				if(p.test(n.item))
+					l = cons(n.item, list);
+				n = n.next;
+			return l.reverse();
+			}
+		}
+	4) public FunList<T> removeFun(Predicate<T> p){ 
+			return 	remove(p.negate();)
+		}
+	
+	5) public static <T> FunList<T> flatten(FunList<FunList<T>> xss){
+			Node<FunList<T>> n = xss.item;
+			FunList<T> l = new FunList<>();
+			while(node != null)
+				l = node.item.append(l);
+			return l;
+		}
+
+
+	6) public static <T> FunList<T> flattenFun(FunList<FunList<T>> xss){
+			return xss.reduce(new FunList<T>(), (fl, ffl) -> ffl.first.item.append(fl));
+		}
+		Comments: It does not type check. Do not why.
+	7)a) public <U> FunList<U> flatMap(Function<T, FunList<U>> f){
+		Node<FunList<T>> node = first;
+		FunList<T> l = new FunList<>();
+		while(node != null)
+			l = (f.apply(node.item)).append(l);
+		return l.reverse();
+	    }
+	
+	   b) public <U> FunList<U>  flatMap(Function<T, FunList<U>> f){
+	   		flatten(map(t -> f.apply(t)));
+	   }
+
+Exercise 3.2 
+		1) main: 
+			final int N = 10_000_001;
+			final int[] arr = new int[N];
+			Arrays.parrallelSetAll(arr, i -> isPrime(i) ? 1 : 0);
+
+		2)  Arrays.parallelPrefix(arr, (i1, i2) -> i1 + i2);
+
+		3) for(int i = 0; i < N; i+=10)
+				System.out.println(arr[i]/(i/Math.log(i)));
+	
+Exercise 3.3)
+		1) readWords method: return reader.lines();
+		2) readWords(String filename)
+				.limit(100)
+				.forEach(System.out::println);
+
+		3) readWords(String filename)
+				.filter(s -> s.length() >= 22 )
+				.forEach(System.out::println);
+
+		4) readWords(String filename)
+				.filter(s -> length() >=22)
+				.limit(32)
+				.forEach(System.out::println);
+
+		5) readWords(filename)
+				.filter(TestWord::isPalindrome)
+				.forEach(System.out::print);
+
+		6) readWords(filename)
+				.parallel()
+				.filter(TestWord::isPalindrome)
+				.forEach(System.out::print);
+
+		7) System.out.print(readWords(filename).mapToInt(String::length).max().orElse(-1));
+
+		8) a) readWords(filename)
+				.collect(Collectors
+				.groupingBy(String::length));
+		   b) readWords(filename)
+		   		.collect(Collectors
+				.groupingBy(String::length, Collectors.summingInt(String::length));
+
+		9) Function<String, String> lwrc = String::toLowerCase;
+		   Function<String, Map<Character, Integer>> mpch = TestWordStream::letters;
+		   readWords(filename)
+		   		.map(toL.andThen(mpch))
+				.limit(100)
+				.forEach(System.out::println);
+
+		10) readWords(filename)
+					.map(toL.andThen(mpch))
+					.reduce(0, (i, m) -> i + m.getOrDefault('e', 0), (i1, i2) -> i1 + i2);
+
+		11) readWords(filename)
+
+Exercise 3.4)
+		1) System.out.print(IntStream.range(1, 999_999_999).mapToDouble(x -> 1.0/x).sum()) = 21.300481500347942;
+			time:	real	0m13.073s
+				  	user	0m15.808s
+					sys		0m9.352s
+
+		2) System.out.print(IntStream.range(1, 999_999_999).parallel().mapToDouble(x -> 1.0/x).sum()) 21.300481500347942;
+			time:	real	0m5.151s
+				  	user	0m15.372s
+					sys		0m0.704s
+
+		3) 	double count = 0;
+			for(int i =0; i <= 999_999_999; i++) 
+				count+= 1.0/i;
+			System.out.println(count);
+			result = 21.30048150134855
+			time :	real	0m9.926s
+					user	0m11.988s
+					sys		0m1.264s
+
+		4)  final int[] arr = new int[]{0};
+			System.out.print(DoubleStream.generate(() -> arr[0] += 1; return 1.0/arr[0]; }).limit(999_999_999).sum()));
+			result = 21.30048150134855	
+			time:	real	0m9.912s
+					user	0m12.100s
+					sys		0m6.772s
+		
+		5)  final int[] arr = new int[]{0};
+			System.out.print(DoubleStream.generate(() -> arr[0] += 1; return 1.0/arr[0]; }).limit(999_999_999).parallel().sum()));
+			result = 36.249158024949985
+			time:	real	0m6.391s
+					user	0m22.964s
+					sys		0m0.060s
+			The results are different due to race conditions. Thus, One does not simply use mutable state in connection with parallel streams.
+			*flies away*

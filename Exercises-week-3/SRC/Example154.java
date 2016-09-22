@@ -3,8 +3,9 @@
 
 import java.util.function.BiFunction;
 import java.util.function.Consumer;  
-import java.util.function.Function;  
-
+import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.function.BinaryOperator;
 class Example154 {
   public static void main(String[] args) {
     FunList<Integer> empty = new FunList<>(null),
@@ -14,14 +15,19 @@ class Example154 {
       list4 = list1.insert(1, 12),                                // 9 12 13 0    
       list5 = list2.removeAt(3),                                  // 7 9 13       
       list6 = list5.reverse(),                                    // 13 9 7       
-      list7 = list5.append(list5);                                // 7 9 13 7 9 13
+      list7 = list5.append(list5),                                // 7 9 13 7 9 13
+	  list8 = list7.filter(e -> e % 2 != 0),
+	  list9 = list7.removeFun(e -> e % 2 != 0);
+	System.out.println(list8);
+    System.out.println(list7);
+	System.out.println(list9);
+	/*
     System.out.println(list1);
     System.out.println(list2);
     System.out.println(list3);
     System.out.println(list4);
     System.out.println(list5);
     System.out.println(list6);
-    System.out.println(list7);
     FunList<Double> list8 = list5.map(i -> 2.5 * i);              // 17.5 22.5 32.5
     System.out.println(list8); 
     double sum = list8.reduce(0.0, (res, item) -> res + item),    // 72.5
@@ -32,6 +38,7 @@ class Example154 {
     System.out.println(list9);
     boolean allBig = list8.reduce(true, (res, item) -> res && item > 10);
     System.out.println(allBig);
+	*/
   }
 
   public static <T> FunList<T> cons(T item, FunList<T> list) { 
@@ -88,6 +95,67 @@ class FunList<T> {
     return i == 0 ? xs : getNodeRecursive(i-1, xs.next);
   }
 
+  public int count(Predicate<T> p){
+	return count(p, this.first, 0);
+  }
+  private static <T>  int count(Predicate<T> p, Node<T> node, int res){
+	  return node == null ? res : ( p.test(node.item) ? count(p, node.next, res++) : count(p, node.next, res));
+  }
+
+  public FunList<T> scan(BinaryOperator<T> op){
+	  final T[] arr =(T[]) new Object[1];
+	  arr[0] = this.first.item;
+	  return this.map(t ->{
+	  	if(arr[0] != t){
+			T taf = op.apply(t, arr[0]);
+			arr[0] = taf;
+		}
+			return arr[0];
+		});
+  }
+  public FunList<T> removeFun(Predicate<T> p){
+		return this.filter(p.negate());
+  }
+  public FunList<T> remove(T x){
+	return remove(x, this.first, new FunList<T>());
+  }
+	//Tail Recursive
+  private static <T> FunList<T> remove(T x, Node<T> node, FunList<T> res){
+	return node == null ? res : ( x.equals(node.item) ?  remove(x, node.next, res)  : remove(x, node.next, cons(node.item, res)));  
+  }
+
+  public <U> FunList<U> flatMapFun(Function<T, FunList<U>> f){
+		return FunList.<U>flatten(map(t -> f.apply(t)));
+  }
+  public static <T> FunList<T> flatten(FunList<FunList<T>> xss){
+	 	Node<FunList<T>> node = xss.first;
+		FunList<T> l = new FunList<>();
+		while(node != null)
+			l = node.item.append(l);
+		return l.reverse();	
+  }
+ 
+  public static <T> FunList<T> flattenFun(FunList<FunList<T>> xss){
+	  BiFunction<FunList<T>, FunList<FunList<T>>, FunList<T>> bFunction = (fl, ffl) -> {
+		  FunList<T> l = ffl.first.item;			
+		  return l.append(fl);
+	  
+	  };
+		FunList<T> l = new FunList<>();	
+	  return  xss.reduce(l, bFunction); 
+  }
+
+  public FunList<T> filter(Predicate<T> p){
+	Node<T> n = first;
+	FunList<T> list = new FunList<>();
+	while(n != null){
+		if(p.test(n.item))
+			list = cons(n.item, list);
+		n = n.next;
+	}
+	return list.reverse();
+  }
+
   public static <T> FunList<T> cons(T item, FunList<T> list) { 
     return list.insert(0, item);
   }
@@ -104,6 +172,7 @@ class FunList<T> {
     return new FunList<T>(removeAt(i, this.first));
   }
 
+  
   protected static <T> Node<T> removeAt(int i, Node<T> xs) {
     return i == 0 ? xs.next : new Node<T>(xs.item, removeAt(i-1, xs.next));
   }
@@ -165,6 +234,18 @@ class FunList<T> {
       cons.accept(xs.item);
       xs = xs.next;
     }
+  }
+
+
+
+  public <U> FunList<U> flatMap(Function<T, FunList<U>> f){
+	Node<T> node = first;
+	FunList<U> l = new FunList<>();
+	while(node != null){
+		l =  (f.apply(node.item)).append(l);
+		node = node.next;
+	}
+	return l.reverse();
   }
 
   @Override 
