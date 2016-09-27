@@ -1,0 +1,32 @@
+# OS:   Linux; 4.4.0-38-generic; amd64
+# JVM:  Oracle Corporation; 1.8.0_91
+# CPU:  null; 4 "cores"
+# Date: 2016-09-26T20:28:52+0200
+ 559.3 ns +/-   818.74          2
+ 540.3 ns +/-   772.24          4
+ 161.3 ns +/-    55.17          8
+ 270.0 ns +/-   213.22         16
+ 260.6 ns +/-   147.22         32
+  76.9 ns +/-    26.94         64
+ 290.9 ns +/-   601.94        128
+  64.1 ns +/-     3.99        256
+  63.4 ns +/-     2.62        512
+  54.1 ns +/-     9.38       1024
+  52.5 ns +/-    12.81       2048
+  55.0 ns +/-     8.55       4096
+  45.2 ns +/-     2.91       8192
+  44.5 ns +/-     3.05      16384
+  45.9 ns +/-     6.14      32768
+  39.4 ns +/-     0.32      65536
+  39.1 ns +/-     0.06     131072
+  39.1 ns +/-     0.05     262144
+  39.2 ns +/-     0.04     524288
+  39.2 ns +/-     0.15    1048576
+  39.3 ns +/-     0.21    2097152
+  39.2 ns +/-     0.05    4194304
+  39.3 ns +/-     0.21    8388608
+
+As the count increases the standard deviation becomes smaller and the
+mean resides inside the 39,7 +/- 1.218 computed in Mark4. With the exception
+of the count being 128, but as it can be observed the standard dev is also quite
+large questioning the consistency of the result.(128 count)

@@ -1,0 +1,20 @@
+# OS:   Linux; 4.4.0-38-generic; amd64
+# JVM:  Oracle Corporation; 1.8.0_91
+# CPU:  null; 4 "cores"
+# Date: 2016-09-26T22:18:10+0200
+hashCode()                            3.5 ns       0.01  134217728
+Point creation                       62.0 ns       0.22    4194304
+Thread's work                      7348.3 ns       2.52      65536
+Thread create                       856.8 ns       3.40     524288
+Thread create start               37766.2 ns     976.64       8192
+Thread create start join          63318.8 ns    2783.27       4096
+ai value = 1556420000
+Uncontended lock                      7.0 ns       0.02   67108864
+
+The flag -server has been used to compile the code. Worth noting are the
+observations for thread creation, thread creation-start and thread creation-
+start-join, and the running time of Thread's work. First, even thought  the specs
+of the machine used for measuring the operations is not as 'fast' as the maching
+used in slides the to create, start and join a thread seem to be faster. 
+However, Thread's work operation takes quite time 7348.3 having also a small 
+stdev.

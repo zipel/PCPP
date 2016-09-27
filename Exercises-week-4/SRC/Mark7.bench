@@ -1,0 +1,13 @@
+# OS:   Linux; 4.4.0-38-generic; amd64
+# JVM:  Oracle Corporation; 1.8.0_91
+# CPU:  null; 4 "cores"
+# Date: 2016-09-27T07:06:15+0200
+pow                                  98.8 ns       0.70    4194304
+exp                                  70.7 ns       0.51    4194304
+log                                  31.1 ns       0.27    8388608
+sin                                 151.0 ns       0.94    2097152
+cos                                 158.9 ns       0.17    2097152
+tan                                 192.7 ns       0.97    2097152
+asin                                280.2 ns      17.98    1048576
+acos                                257.0 ns       0.42    1048576
+atan                                 53.8 ns       0.96    8388608

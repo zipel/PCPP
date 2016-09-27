@@ -1,0 +1,9 @@
+# OS:   Linux; 4.4.0-38-generic; amd64
+# JVM:  Oracle Corporation; 1.8.0_91
+# CPU:  null; 4 "cores"
+# Date: 2016-09-26T20:17:27+0200
+  39.7 ns +/-  1.218
+
+By measuring the standard deviation and according to normal distribution
+the 68.3% of the observations will probably reside to 39.7 +/- 1.218
+and the 95.4% of them to 39.7 +/- 2.516

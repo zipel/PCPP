@@ -1,0 +1,13 @@
+# OS:   Windows 10; 10.0; amd64
+# JVM:  Oracle Corporation; 1.8.0_101
+# CPU:  Intel64 Family 6 Model 61 Stepping 4, GenuineIntel; 4 "cores"
+# Date: 2016-09-27T18:27:14+0200
+pow                                  95.9 ns       0.69    4194304
+exp                                  72.7 ns       0.63    4194304
+log                                  29.3 ns       0.15   16777216
+sin                                 131.2 ns       0.90    2097152
+cos                                 129.6 ns       3.50    2097152
+tan                                 168.5 ns       1.00    2097152
+asin                                299.8 ns       5.38    1048576
+acos                                283.9 ns       2.73    1048576
+atan                                 48.0 ns       0.23    8388608

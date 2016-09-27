@@ -1,0 +1,41 @@
+# OS:   Linux; 4.4.0-38-generic; amd64
+# JVM:  Oracle Corporation; 1.8.0_91
+# CPU:  null; 4 "cores"
+# Date: 2016-09-27T12:05:55+0200
+countParallelNLocal      1         14565.8 us      96.98         32
+countParallelNLocal      2          9920.7 us      99.93         32
+countParallelNLocal      3          9087.2 us      64.67         32
+countParallelNLocal      4          7418.6 us      48.27         64
+countParallelNLocal      5          7945.3 us     152.57         32
+countParallelNLocal      6          7828.9 us     134.79         32
+countParallelNLocal      7          7913.6 us      95.10         32
+countParallelNLocal      8          7931.3 us     122.93         32
+countParallelNLocal      9          7992.9 us     115.22         32
+countParallelNLocal     10          8114.6 us     158.64         32
+countParallelNLocal     11          8184.6 us     163.22         32
+countParallelNLocal     12          8106.9 us     101.64         32
+countParallelNLocal     13          8208.2 us     125.30         32
+countParallelNLocal     14          8233.5 us     152.08         32
+countParallelNLocal     15          8277.6 us     107.33         32
+countParallelNLocal     16          8361.5 us     139.87         32
+countParallelNLocal     17          8312.3 us     158.45         32
+countParallelNLocal     18          8343.7 us     112.54         32
+countParallelNLocal     19          8450.4 us     205.45         32
+countParallelNLocal     20          8344.5 us     157.92         32
+countParallelNLocal     21          8562.0 us     134.89         32
+countParallelNLocal     22          8581.6 us     185.68         32
+countParallelNLocal     23          8528.7 us     126.52         32
+countParallelNLocal     24          8628.1 us     119.51         32
+countParallelNLocal     25          8774.9 us     217.72         32
+countParallelNLocal     26          8686.1 us     138.34         32
+countParallelNLocal     27          8754.8 us     220.09         32
+countParallelNLocal     28          8807.7 us     207.86         32
+countParallelNLocal     29          8832.4 us     239.25         32
+countParallelNLocal     30          8803.3 us     179.90         32
+countParallelNLocal     31          8926.3 us     142.64         32
+countParallelNLocal     32          9074.8 us     170.45         32
+
+The parallelLocal case seems to be faster than the case when the LongCounter
+is used. 
+I guess that it might be due to mispredictions of the cpu metioned in 
+McKenney's book and thus the cpu finally flushes the cached computations.

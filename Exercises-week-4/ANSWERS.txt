@@ -1,4 +1,35 @@
 ---------------------------------------------------------------------------------------
 Note:The hand-in in group 8 is identical to that in group 70, because of collaboration.
 ---------------------------------------------------------------------------------------
+Exercise 4.1)
+	1) See files Mark1.bench - Mark6.bench and the system.properties file.
+	2) See file Mark7.bench and Mark7_1.bench
+		For most operations the machine used in slides manages to 
+		perform 1 or 2 more iterations than our computers.
+		This we think is reasonable due to faster clock cycle of the former.
 
+Exercise 4.2)
+	1) The stdv seems to minimize as the count grows for hashcode() reaching 
+		0.01 and 0.09 for 67108864 and 134217728 respectively and means 3.5, 3.6.
+		Similar behavior is observed for 'Point Creation' reaching stdev = 1.15 and mean = 57.7 
+		at 8388608 count. The standard deviation of creating, starting and joining threads fluctuates
+		significanlty and sometimes reaches the half of the mean.
+	2) See file Mark7_4.bench.
+
+Exercise 4.3)
+	1) See testParallelLocal.bench file.
+	2) See exercise423.ods file
+	3) The optimal solution seems the one that creates three-four threads, number
+		equal with the  cpu cores, which is reasonable since for more than
+		4 threads there will be a penalty overhead for managing these
+		threads since there are no other cpu for the threads to run to.
+	
+	4) Only for using one or two threads the AtomicLong case seems to
+		be faster. While for more than two threads the LongCounter
+		seems to a better choice. The optimal solution for the AtomicLong
+		case seems to be also when using four threads number equal
+		with cpu cores. It seems that the use of built-in classes does
+		not guarantee best case in all cases. See exercise434.ods.
+	5) See testParallelLocal.bench
+Exercise 4.4)
+	1 -6) See SRC/memoizer.bench and SRC/TestTimeMemoizer.java

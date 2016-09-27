@@ -1,0 +1,29 @@
+# OS:   Linux; 4.4.0-38-generic; amd64
+# JVM:  Oracle Corporation; 1.8.0_91
+# CPU:  null; 4 "cores"
+# Date: 2016-09-26T20:41:45+0200
+multiply                            901.5 ns    1820.74          2
+multiply                           4964.0 ns   14647.58          4
+multiply                            264.1 ns      81.74          8
+multiply                            334.1 ns      58.92         16
+multiply                            404.9 ns     310.38         32
+multiply                            100.3 ns      39.59         64
+multiply                             95.0 ns      91.70        128
+multiply                             85.7 ns      17.28        256
+multiply                             89.9 ns      17.71        512
+multiply                             64.0 ns      13.51       1024
+multiply                             51.4 ns       2.44       2048
+multiply                             63.3 ns      10.09       4096
+multiply                             45.1 ns       2.79       8192
+multiply                             46.6 ns       0.30      16384
+multiply                             47.7 ns       6.85      32768
+multiply                             39.1 ns       0.04      65536
+multiply                             39.1 ns       0.07     131072
+multiply                             39.1 ns       0.06     262144
+multiply                             39.2 ns       0.17     524288
+multiply                             39.2 ns       0.05    1048576
+multiply                             39.2 ns       0.07    2097152
+multiply                             39.2 ns       0.06    4194304
+multiply                             39.2 ns       0.02    8388608
+
+By generalizing the method for benchmarking we can measure different functions.

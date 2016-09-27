@@ -1,0 +1,9 @@
+# OS:   Linux; 4.4.0-38-generic; amd64
+# JVM:  Oracle Corporation; 1.8.0_91
+# CPU:  null; 4 "cores"
+# Date: 2016-09-26T20:02:48+0200
+   0.1 ns
+
+As the file suggests this measurement provides no help since the dummy variable is not used
+outside the method making code optimization to eliminate the computation inside the loop for 
+large values of i.
