@@ -18,23 +18,23 @@ import java.util.concurrent.Future;
 import java.util.function.IntToDoubleFunction;
 import java.util.concurrent.atomic.LongAdder;
 
-public class TestCountPrimesTasks {
+public class TestCountPrimesTasksLongAdder {
   private static final ExecutorService executor 
-  //  = Executors.newWorkStealingPool();
+    = Executors.newWorkStealingPool();
   // = Executors.newCachedThreadPool();
  //	= Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors() + 1);
   public static void main(String[] args) {
     SystemInfo();
     final int range = 100_000;
-   /* System.out.println(Mark7("countSequential", 
+    System.out.println(Mark7("countSequential", 
 			     i -> countSequential(range)));
     System.out.println(Mark7(String.format("countParTask1 %6d", 32), 
 			     i -> countParallelN1(range, 32)));
     System.out.println(Mark7(String.format("countParTask2 %6d", 32), 
 			     i -> countParallelN2(range, 32)));
   	 System.out.println(Mark7(String.format("countParTask3 %6d", 32), 
-			     i -> countParallelN3(range, 32))); */
-    for (int c=1; c<=32; c++) {
+			     i -> countParallelN3(range, 32))); 
+   /* for (int c=1; c<=32; c++) {
       final int taskCount = c;
       Mark7(String.format("countParTask1 %6d", taskCount), 
 	    i -> countParallelN1(range, taskCount));
@@ -47,9 +47,9 @@ public class TestCountPrimesTasks {
     }
     for (int c=1; c<=32; c++) {
       final int taskCount = c;
-      Mark7(String.format("countParTask2 %6d", taskCount), 
+      Mark7(String.format("countParTask3 %6d", taskCount), 
 	    i -> countParallelN3(range, taskCount));
-    }
+    }*/
 	
 	
 		executor.shutdown();
@@ -75,7 +75,7 @@ public class TestCountPrimesTasks {
   // General parallel solution, using multiple (Runnable) tasks
   private static long countParallelN1(int range, int taskCount) {
     final int perTask = range / taskCount;
-    final LongCounter lc = new LongCounter();
+    final LongAdder lc = new LongAdder();
     List<Future<?>> futures = new ArrayList<Future<?>>();
     for (int t=0; t<taskCount; t++) {
       final int from = perTask * t, 
@@ -94,7 +94,7 @@ public class TestCountPrimesTasks {
     } catch (ExecutionException exn) { 
       throw new RuntimeException(exn.getCause()); 
     }
-    return lc.get();
+    return lc.longValue();
   }
 
   // General parallel solution, using multiple Callable<Long> tasks
@@ -129,7 +129,7 @@ public class TestCountPrimesTasks {
   // as to be able to submit all to the executor in one method call.
   private static long countParallelN3(int range, int taskCount) {
     final int perTask = range / taskCount;
-    final LongCounter lc = new LongCounter();
+    final LongAdder lc = new LongAdder();
     List<Callable<Void>> tasks = new ArrayList<Callable<Void>>();
     for (int t=0; t<taskCount; t++) {
       final int from = perTask * t, 
@@ -146,7 +146,7 @@ public class TestCountPrimesTasks {
     } catch (InterruptedException exn) { 
       System.out.println("Interrupted: " + exn);
     } 
-    return lc.get();
+    return lc.longValue();
   }
 
   // --- Benchmarking infrastructure ---

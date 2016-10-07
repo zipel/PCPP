@@ -25,10 +25,29 @@ import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.MatchResult;
 import java.util.regex.Pattern;
-
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ExecutorService;
 public class TestPipeline {
+	private static final ExecutorService exec 
+		//= Executors.newWorkStealingPool();
+		// = Executors.newFixdThreadPool(3);
+		= Executors.newFixedThreadPool(6);
   public static void main(String[] args) {
     runAsThreads();
+  }
+
+  private static void runWithExecutor(){
+	  final BlockingQueue<String> urls = new OneItemQueue<>();
+	  final BlockingQueue<Webpage> pages = new OneItemQueue<>();
+	  final BlockingQueue<Link> intermediate = new OneItemQueue<>();
+	  final BlockingQueue<Link> refPairs = new OneItemQueue<>();
+	  exec.submit(new UrlProducer(urls));
+	  exec.submit(new PageGetter(urls, pages));
+	  exec.submit(new PageGetter(urls, pages));
+	  exec.submit(new LinkScanner(pages, refPairs));
+	  exec.submit(new Uniquifier<Link>(refPairs, intermediate));
+	  exec.submit(new LinkPrinter(intermediate));
   }
 
   private static void runAsThreads() {

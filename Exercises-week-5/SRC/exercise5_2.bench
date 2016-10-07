@@ -1,0 +1,4 @@
+Loops                              7363.9 ns      26.90      65536
+Creates a Task                        3.5 ns       0.00  134217728
+Creates and Cancels a task:            171.8 ns      34.85    2097152
+Creates, submits and gets the task:          15832.8 ns     101.50      16384
