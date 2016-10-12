@@ -1,0 +1,37 @@
+# OS:   Linux; 4.4.0-38-generic; amd64
+# JVM:  Oracle Corporation; 1.8.0_91
+# CPU:  null; 4 "cores"
+# Date: 2016-10-12T09:53:15+0200
+
+SynchronizedMap       1         1283990.3 us   53456.45          2
+StripedMap            1         1385643.7 us   41303.04          2
+SynchronizedMap       2         1828353.3 us  130166.43          2
+StripedMap            2          813456.3 us   80382.30          2
+SynchronizedMap       3         1662555.0 us   86701.93          2
+StripedMap            3          575304.7 us   63348.58          2
+SynchronizedMap       4         1691132.0 us   92122.02          2
+StripedMap            4          461923.3 us   63146.45          2
+SynchronizedMap       5         1610924.0 us   93615.63          2
+StripedMap            5          620188.2 us  103383.77          2
+SynchronizedMap       6         1532422.8 us   84062.01          2
+StripedMap            6          501118.8 us   33309.51          2
+SynchronizedMap       7         1542296.1 us   53132.01          2
+StripedMap            7          559517.5 us   98469.97          2
+SynchronizedMap       8         1751841.5 us  137823.02          2
+StripedMap            8          814869.2 us   83695.11          2
+SynchronizedMap       9         1754376.2 us  111235.14          2
+StripedMap            9          763493.0 us  187212.79          2
+SynchronizedMap       10        1858813.5 us  294055.86          2
+StripedMap            10         520922.9 us    7111.93          2
+SynchronizedMap       11        1502725.2 us   27842.63          2
+StripedMap            11         531140.0 us   12568.39          2
+SynchronizedMap       12        1600662.1 us  120460.54          2
+StripedMap            12         586923.9 us   42088.53          2
+SynchronizedMap       13        1517121.2 us   31026.09          2
+StripedMap            13         552317.1 us   15613.08          2
+SynchronizedMap       14        1517436.6 us   24520.67          2
+StripedMap            14         570116.6 us   17252.38          2
+SynchronizedMap       15        1560897.1 us   72144.79          2
+StripedMap            15         633377.3 us   57037.35          2
+SynchronizedMap       16        1486066.8 us   64179.41          2
+StripedMap            16         565859.4 us   16839.83          2

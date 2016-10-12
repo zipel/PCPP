@@ -1,0 +1,12 @@
+# OS:   Linux; 4.4.0-38-generic; amd64
+# JVM:  Oracle Corporation; 1.8.0_91
+# CPU:  null; 4 "cores"
+# Date: 2016-10-12T17:50:42+0200
+SynchronizedMap       16         555172.1 us   24207.29          2
+99992.0
+StripedMap            16         297134.8 us   63309.90          2
+99992.0
+StripedWriteMap       16         254344.5 us   30491.37          2
+99992.0
+WrapConcHashMap       16         239500.9 us   69569.26          2
+99992.0

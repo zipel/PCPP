@@ -1,3 +1,36 @@
 ---------------------------------------------------------------------------------------
 Note:The hand-in in group 8 is identical to that in group 70, because of collaboration.
 ---------------------------------------------------------------------------------------
+Exercise 6.1)
+		1) See TestStripedMap.java
+		2) See TestStripedMap.java
+		   To make sure that no put operation will take place.
+		3 - 5) See TestStripedMap.java
+		
+		7)  See exercise1.txt.
+			Reflect: In a single-thread context StripedMap seems not to behave as efficiently as SynchronizedMap.
+			An expected behaviour since StripedMap have to handle the initialization of the locks.
+			However, in a multi-thread context, the overhead of initializating the lock objects are far less than 
+			the benefit that they provide (avoid of contended locks).
+
+		8) The advantages of using a small number of locks instead of having a lock for each entry is that 
+			makes easier to lock the data structure for exclussive access.
+
+		9) The more stripes we use the less likely is for a thread to ask for a lock already held by another
+			thread(assuming the hashcode() distributes the values evenly).
+
+
+Exercise 6.2)
+		1 - 5) See TestStripedMap.java
+		6) See exercise2.bench
+			The results are as expected. The Striped implementations are two times more efficient than the
+			SynchronizedMap. 
+Exercise 6.3)
+		1) See exercise3.bench
+				The AtomicLong seems to be the most inapropriate, which is quite expected due to the 
+				over serialization. The most suprising of all is the difference between the NewLongAdder
+				and NewLongAdderPadded implementation. 
+		2) See exercise3.bech
+				The NewLongAdderLessPadded class seems to be less efficient than the NewLongAdderPadded class, with 
+				20% difference.
+	

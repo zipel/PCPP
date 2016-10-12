@@ -42,6 +42,8 @@ public class TestLongAdders {
           i -> exerciseNewLongAdder());
     Mark7("NewLongAdderPadded", 
           i -> exerciseNewLongAdderPadded());
+    Mark7("NewLongAdderLessPadded", 
+          i -> exerciseNewLongAdderLessPadded());
   }
 
   // Timing of Java's AtomicLong
@@ -144,6 +146,23 @@ public class TestLongAdders {
     return adder.longValue();
   }
 
+  private static double exerciseNewLongAdderLessPadded(){
+	  final NewLongAdderLessPadded adder = new NewLongAdderLessPadded();
+	  Thread[] threads = new Thread[threadCount];
+	  for (int t= 0; t <threadCount; t++){
+		  final int myThread = t;
+		  threads[t] = new Thread(() -> {
+			  for(int i =0; i < iterations; i++)
+				  adder.add(i);
+		  });
+	  }
+	  for(Thread t : threads) t.start();
+	  try{
+		  for(Thread t : threads)
+			  t.join();
+	  }catch(InterruptedException e) { }
+	  return adder.longValue();
+  }
   // --- Benchmarking infrastructure ---
 
   private static class Timer {

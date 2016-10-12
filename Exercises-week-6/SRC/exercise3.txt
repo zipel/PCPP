@@ -1,0 +1,12 @@
+# OS:   Linux; 4.4.0-38-generic; amd64
+# JVM:  Oracle Corporation; 1.8.0_91
+# CPU:  null; 4 "cores"
+# Date: 2016-10-12T18:07:16+0200
+current thread hashCode               0.0 us       0.00  134217728
+ThreadLocalRandom                     0.0 us       0.00   67108864
+AtomicLong                      1023407.6 us   78389.61          2
+LongAdder                        179726.2 us    6552.76          2
+LongCounter                      451829.3 us  257628.87          2
+NewLongAdder                     469340.7 us   57506.27          2
+NewLongAdderPadded               207800.3 us   12337.54          2
+NewLongAdderLessPadded           250944.1 us   18880.00          2
