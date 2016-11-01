@@ -1,4 +1,19 @@
 ---------------------------------------------------------------------------------------
 Note:The hand-in in group 8 is identical to that in group 70, because of collaboration.
 ---------------------------------------------------------------------------------------
+Exercise 7.1)
+	1) See SRC/TestFetchWebGui.java
+		We used the first option. We instantiated N SwingWorkers for each url.
+		Once the worker finishes it returns the result and the TextArea is mutated
+		in done() method. The code defined in done() method can manipulate swing
+		components since the method is only executed on the Event Thread Dispatcher.
+
+		publish() method send intermediate result to process() method. It is meant to be used
+		from worker threads. However the process method is invoked asynchronously on the Event 
+		Dispatch Thread, thus multiple invocations to publish method might occur before the process method
+		is executed.
+	2 - 3) See SRC/TestFetchWebGui.java
+
+		
+Exercise 7.2) 
 
