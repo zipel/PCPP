@@ -2,3 +2,51 @@
 Note:The hand-in in group 8 is identical to that in group 70, because of collaboration.
 ---------------------------------------------------------------------------------------
 
+Exercise 8.1)
+	1) The test does not cover the remove method. Also the test for the 
+	forEach method is based only on printing rather than the validation. 
+	We added test for remove and forEach method. See TestStripedMap.testMap().
+
+    2) See StripedWriteMapTest.java
+    The ThreadTest class is the abstraction of the test threads. We do not know how we can test
+    the containsKey. We can not be 100% sure that the key that is expected to be in the map
+    have not been removed by another thread. The test passes
+
+    3) It passes the tests.
+
+    4 - 5) See StripedWriteMapTest.java 
+
+    6) 
+
+Exercise 8.2) 
+    
+    1)  It fails to pass the test in case of removing synchronized block
+        from put method: 
+            Sum[] = 3329, count = 116532
+            Exception in thread "main" java.lang.AssertionError
+                at StripedWriteMapTest.test(StripedWriteMapTest.java:38)
+                at StripedWriteMapTest.main(StripedWriteMapTest.java:106)
+
+        It fails when we remove the synchronized block from putIfAbsent:
+            Sum[] = 3070, count = 348326
+            Exception in thread "main" java.lang.AssertionError
+                at StripedWriteMapTest.test(StripedWriteMapTest.java:38)
+                at StripedWriteMapTest.main(StripedWriteMapTest.java:106)
+
+        It fails when we remove the synchronized block from remove:
+            Sum[] = 3143, count = -274739 
+            Exception in thread "main" java.lang.AssertionError
+                at StripedWriteMapTest.test(StripedWriteMapTest.java:38)
+                at StripedWriteMapTest.main(StripedWriteMapTest.java:106)
+    
+    2) In the put method we locked with this, in remove with locks[0] and putIfAbsent with this.
+       It does not pass the tests.
+            Sum[] = 3343, count = 86796
+            Exception in thread "main" java.lang.AssertionError
+                at StripedWriteMapTest.test(StripedWriteMapTest.java:38)
+                at StripedWriteMapTest.main
+
+
+    3 - 4) It does not discover the improper synchronization. It passes the test.
+
+
