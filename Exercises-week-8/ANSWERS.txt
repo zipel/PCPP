@@ -7,16 +7,16 @@ Exercise 8.1)
 	forEach method is based only on printing rather than the validation. 
 	We added test for remove and forEach method. See TestStripedMap.testMap().
 
-    2) See StripedWriteMapTest.java
-    The ThreadTest class is the abstraction of the test threads. We do not know how we can test
-    the containsKey. We can not be 100% sure that the key that is expected to be in the map
-    have not been removed by another thread. The test passes
+	2) See StripedWriteMapTest.java
+	The ThreadTest class is the abstraction of the test threads. We do not know how we can
+	testthe containsKey. We can not be 100% sure that the key that is expected to be in the
+	map have not been removed by another thread. The test passes.
 
-    3) It passes the tests.
+	3) It passes the tests.
 
-    4 - 5) See StripedWriteMapTest.java 
+	4 - 5) See StripedWriteMapTest.java 
 
-    6) 
+	6) 
 
 Exercise 8.2) 
     
@@ -48,5 +48,3 @@ Exercise 8.2)
 
 
     3 - 4) It does not discover the improper synchronization. It passes the test.
-
-
