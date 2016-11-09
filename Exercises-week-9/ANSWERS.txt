@@ -1,0 +1,61 @@
+Exercise 9.1)
+    1) The Sequential fails. 
+        Nov 08, 2016 9:20:47 PM org.multiverse.api.GlobalStmInstance <clinit>
+        INFO: Initializing GlobalStmInstance using factoryMethod 'org.multiverse.stms.gamma.GammaStm.createFast'.
+        Nov 08, 2016 9:20:47 PM org.multiverse.api.GlobalStmInstance <clinit>
+        INFO: Successfully initialized GlobalStmInstance using factoryMethod 'org.multiverse.stms.gamma.GammaStm.createFast'.
+
+        Parallel test: class StmBoundedQueue... passed
+
+        Sequential test: class StmBoundedQueueException in thread "main" java.lang.Exception: ERROR: assertTrue
+            at Tests.assertTrue(TestBoundedQueueTest.java:55)
+            at TestBoundedQueueTest.sequentialTest(TestBoundedQueueTest.java:29)
+            at TestBoundedQueueTest.main(TestBoundedQueueTest.java:18)
+
+
+    2-6) See TestStmHistogram.java . For 6) it prints the expected results.
+
+    7)  I would expect a dead kind lock because every time the transaction is about to commit
+        the local changes will be invalid. 
+        It seems that i was wrong since the output is: 
+
+            Nov 09, 2016 1:46:26 PM org.multiverse.api.GlobalStmInstance <clinit>
+            INFO: Initializing GlobalStmInstance using factoryMethod 'org.multiverse.stms.gamma.GammaStm.createFast'.
+            Nov 09, 2016 1:46:26 PM org.multiverse.api.GlobalStmInstance <clinit>
+            INFO: Successfully initialized GlobalStmInstance using factoryMethod 'org.multiverse.stms.gamma.GammaStm.createFast'.
+            **********   
+             0:         2
+             1:    283146
+             2:    790986
+             3:    988651
+             4:    810386
+             5:    524171
+             6:    296702
+             7:    155475
+             8:     78002
+             9:     38069
+            10:     18232
+            11:      8656
+            12:      4055
+            13:      1886
+            14:       865
+            15:       400
+            16:       179
+            17:        79
+            18:        35
+            19:        14
+            20:         7
+            21:         2
+            22:         0
+            23:         0
+            24:         0
+            25:         0
+            26:         0
+            27:         0
+            28:         0
+            29:         0
+                  4000000
+
+        It seems since our implementation forces individual changes in bin to be atomic,
+        and not changes in the whole data structure, it only checks if the specific bin is
+        still valid and then commits the changes, avoiding long running invalidations.
