@@ -1,5 +1,5 @@
 Exercise 9.1)
-    1) The Sequential fails. 
+   1) The Sequential fails. 
         Nov 08, 2016 9:20:47 PM org.multiverse.api.GlobalStmInstance <clinit>
         INFO: Initializing GlobalStmInstance using factoryMethod 'org.multiverse.stms.gamma.GammaStm.createFast'.
         Nov 08, 2016 9:20:47 PM org.multiverse.api.GlobalStmInstance <clinit>
@@ -12,8 +12,8 @@ Exercise 9.1)
             at TestBoundedQueueTest.sequentialTest(TestBoundedQueueTest.java:29)
             at TestBoundedQueueTest.main(TestBoundedQueueTest.java:18)
 
-
-    2-6) See TestStmHistogram.java . For 6) it prints the expected results.
+Exercise 9.2) 
+    1-6) See TestStmHistogram.java . For 6) it prints the expected results.
 
     7)  I would expect a dead kind lock because every time the transaction is about to commit
         the local changes will be invalid. 
@@ -59,3 +59,11 @@ Exercise 9.1)
         It seems since our implementation forces individual changes in bin to be atomic,
         and not changes in the whole data structure, it only checks if the specific bin is
         still valid and then commits the changes, avoiding long running invalidations.
+       
+Exercise 9.3) 
+    1 - 4) See TestStmMap.java. The test fails and we do not know the reason. It fails in 106 line.
+    5)  A good solution might be, according to our opinion, to keep a TxnBoolean field and in case 
+        of it being true means that no re allocation takes part and the put, putIfAbsent, and 
+        remove can run. However in case the field is false, meaning that the re allocation takes place,
+        all the aforementioned operations will retry() till
+        the TxnBoolean becomes again true.

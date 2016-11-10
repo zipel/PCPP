@@ -15,10 +15,13 @@ import org.multiverse.api.Txn;
 import org.multiverse.api.references.*;
 import org.multiverse.api.StmUtils;
 import org.multiverse.api.callables.TxnVoidCallable;
+import org.multiverse.stms.gamma.transactionalobjects.GammaTxnBoolean;
 import static org.multiverse.api.StmUtils.*;
 
 import java.util.Random;
-
+import java.util.function.IntFunction;
+import java.util.List;
+import java.util.ArrayList;
 import java.util.concurrent.Callable;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.IntToDoubleFunction;
@@ -26,8 +29,8 @@ import java.util.function.IntToDoubleFunction;
 public class TestStmMap {
   public static void main(String[] args) {
     SystemInfo();
-    testAllMaps(); 
-    exerciseAllMaps();
+    //testAllMaps(); 
+    //exerciseAllMaps();
   }
 
   // TO BE HANDED OUT
@@ -207,12 +210,13 @@ interface OurMap<K,V> {
 
 class StmMap<K,V> implements OurMap<K,V> {
   private final TxnRef<TxnRef<ItemNode<K,V>>[]> buckets;
+  private final TxnBoolean isPermitted = new GammaTxnBoolean(true);
   private final TxnInteger cachedSize;  
 
   public StmMap(int bucketCount) {
     final TxnRef<ItemNode<K,V>>[] buckets = makeBuckets(bucketCount);
     this.buckets = StmUtils.<TxnRef<ItemNode<K,V>>[]>newTxnRef(buckets);
-    this.cachedSize = newTxnInteger();
+    this.cachedSize = newTxnInteger(0);
   }
 
   @SuppressWarnings("unchecked") 
@@ -240,27 +244,90 @@ class StmMap<K,V> implements OurMap<K,V> {
   }
 
   // Return value v associated with key k, or null
+  @SuppressWarnings("unchecked") 
   public V get(K k) {
-    throw new RuntimeException("Not implemented");
+      final ItemNode<K,V>[] node =(ItemNode<K, V>[]) new ItemNode[1];
+      atomic(() -> {
+          final TxnRef<ItemNode<K, V>>[] bs = buckets.get();
+          final int h = getHash(k), hash = h % bs.length; 
+          node[0] = bs[hash].get();
+      });
+      final Holder<V> holder = new Holder<>();
+      ItemNode.search(node[0], k, holder);
+      return holder.get();
   }
 
   public int size() {
-    throw new RuntimeException("Not implemented");
+      return cachedSize.atomicGet();
   }
 
   // Put v at key k, or update if already present.  
   public V put(K k, V v) {
-    throw new RuntimeException("Not implemented");
+      return atomic (() -> {
+          if (!isPermitted.get())
+              retry();
+          final TxnRef<ItemNode<K, V>>[] bs = buckets.atomicGet();
+          final int h = getHash(k), hash = h % bs.length;
+          final TxnRef<ItemNode<K, V>> txnNode = bs[hash];
+          ItemNode<K, V> node = txnNode.atomicGet();
+          if (node != null && node.k.equals(k)) {
+              V tmp = node.v;
+              ItemNode<K, V> newNode = new ItemNode<>(k, v, node.next);
+              bs[hash] = StmUtils.<ItemNode<K, V>>newTxnRef(newNode);
+              return node.v;
+          }
+          Holder<V> holder = new Holder<>();
+          ItemNode.delete(node, k, holder);
+          ItemNode<K, V> newNode = new ItemNode<>(k, v, node);
+          bs[hash].atomicSet(newNode);
+          if (holder.get() == null)
+              cachedSize.increment();
+          return holder.get();
+      });
   }
 
   // Put v at key k only if absent.  
   public V putIfAbsent(K k, V v) {
-    throw new RuntimeException("Not implemented");
+      return atomic(() -> {
+          if (!isPermitted.get())
+              retry();
+          final TxnRef<ItemNode<K, V>>[] bs = buckets.get();
+          final int h = getHash(k), hash = h % bs.length ;
+          final TxnRef<ItemNode<K, V>> txnNode = bs[hash];
+          ItemNode<K, V> node =  txnNode.get();
+          Holder<V> holder = new Holder<>();
+          if (node == null || !ItemNode.search(node, k, holder)) {
+              ItemNode<K, V> newNode = new ItemNode<>(k, v, node);
+              bs[hash].atomicSet(newNode);
+              cachedSize.increment();
+              return null;
+          }
+          return holder.get();
+      });
   }
 
   // Remove and return the value at key k if any, else return null
   public V remove(K k) {
-    throw new RuntimeException("Not implemented");
+      return atomic( () -> {
+          if (!isPermitted.get())
+              retry();
+          final TxnRef<ItemNode<K, V>>[] bs = buckets.get();
+          final int h = getHash(k), hash = h % bs.length;
+          final TxnRef<ItemNode<K, V>> txnNode = bs[hash];
+          if (txnNode.atomicIsNull()) 
+              return null;
+          ItemNode<K, V> node = txnNode.get();
+          if (node.k.equals(k)) {
+              bs[hash].set(node.next);
+              return node.v;
+          }
+          Holder<V> holder = new Holder<>();
+          ItemNode.delete(node, k, holder);
+          if (holder.get() != null) 
+              cachedSize.decrement();
+          
+          return holder.get();
+      });
   }
 
   // Iterate over the hashmap's entries one bucket at a time.  Since a
@@ -268,13 +335,41 @@ class StmMap<K,V> implements OurMap<K,V> {
   // lists are immutable, only visibility is needed, no transactions.
   // This is good, because calling a consumer inside an atomic seems
   // suspicious.
+  @SuppressWarnings("unchecked") 
   public void forEach(Consumer<K,V> consumer) {
-    throw new RuntimeException("Not implemented");
+      TxnRef<ItemNode<K,V>>[] arr = atomic(() -> buckets.get());
+      final List<ItemNode<K, V>> listNode = new ArrayList<>();
+      for (TxnRef<ItemNode<K,V>> txnNode : arr) {
+          atomic(() -> listNode.add(txnNode.get()));
+      }
+      listNode.forEach((n) -> { 
+          if (n != null)
+              consumer.accept(n.k, n.v);
+      });
+
   }
 
-  // public void reallocateBuckets() { 
-  //   throw new RuntimeException("Not implemented");
-  // }
+   public void reallocateBuckets() { 
+       isPermitted.atomicSet(false);
+       //Other transactions can only read
+       int length = buckets.atomicGet().length;
+       final TxnRef<ItemNode<K, V>>[] newBuckets = makeBuckets(2 * length);
+       for (int i = 0; i < length; i++) {
+           TxnRef<ItemNode<K, V>> txnNode = buckets.atomicGet()[i];
+           ItemNode<K, V> node =  txnNode.atomicGet();
+           while(node != null) {
+               final int newHash = getHash(node.k) % newBuckets.length;
+               ItemNode<K, V> next = node.next;
+               TxnRef<ItemNode<K, V>> txn = StmUtils.<ItemNode<K,V>>newTxnRef();  
+               txn.atomicSet(next);
+               txn = newBuckets[newHash];
+               newBuckets[newHash].atomicSet(node);
+               node = next;
+           }
+       }
+       buckets.atomicSet(newBuckets);
+       isPermitted.atomicSet(true);
+   }
   
   static class ItemNode<K,V> {
     private final K k;
