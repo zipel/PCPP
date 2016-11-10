@@ -19,9 +19,9 @@ Exercise 9.1)
 Exercise 9.2) 
     1-6) See TestStmHistogram.java . For 6) it prints the expected results.
 
-    7)  I would expect a dead kind lock because every time the transaction is about to commit
+    7)  We would expect a dead kind lock because every time the transaction is about to commit
         the local changes will be invalid. 
-        It seems that i was wrong since the output is: 
+        It seems that we was wrong since the output is: 
 
             Nov 09, 2016 1:46:26 PM org.multiverse.api.GlobalStmInstance <clinit>
             INFO: Initializing GlobalStmInstance using factoryMethod 'org.multiverse.stms.gamma.GammaStm.createFast'.
@@ -69,5 +69,4 @@ Exercise 9.3)
     5)  A good solution might be, according to our opinion, to keep a TxnBoolean field and in case 
         of it being true means that no re allocation takes part and the put, putIfAbsent, and 
         remove can run. However in case the field is false, meaning that the re allocation takes place,
-        all the aforementioned operations will retry() till
-        the TxnBoolean becomes again true.
+        all the aforementioned operations will retry() till the TxnBoolean becomes again true.
