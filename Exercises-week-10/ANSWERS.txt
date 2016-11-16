@@ -2,3 +2,126 @@
 Note:The hand-in in group 8 is identical to that in group 70, because of collaboration.
 ---------------------------------------------------------------------------------------
 
+Exercise 10.1) 
+    1)  See CasHistogram.java.
+        increment(): It works because the compare and set operation ensures return true only when  
+        the fetched value has not been invalidated by other thread.
+    
+        getBins: The getBins works because there are only read operation, and classes in atomic 
+        package guarantee that any change is visible to any other thread.
+
+        getAndClear:  Same reasoning as increment(), the counter changes and the old value returns
+        only if the fetched value has not been invalidated by other thread. 
+
+        transferBins: The counter changes only if its value has not been modified by other thread.
+
+    2) It produces the correct result. run javac Histogram.java CasHistogram.java TestCasHistogram.java, and then
+        java TestCasHistogram
+    
+    3)  TestCasHistogram : 6.034559267
+        TestStmHistogram : 6.08133021
+
+Exercise 10.2)
+    1 - 7) See SimpleRWTryLock.java The tests are in the main.
+
+Exercise 10.3) 
+    1) See pseudorandom.ods for the graphical form.
+
+    The thread local generators behaves as expected, since as the book(Java Concurrency in Practice) points we can 
+    imporove scalability by dealing more effectively with contention but true scalability is achieved only by 
+    eliminating contention entirely. From java documentation for ThreadLocalRandom, the number generator is 
+    isolated to the current thread. The difference on running times between the TLLockingRandom, TLCasRandom  
+    is based on the overhead of locking and the compareAndSet failed attempts to get the nextInt(). 
+    Also the difference between locks and atomics(compareAndSet operations) is expected, demonstrating the advantages and 
+    drawbacks of each. With low to moderate contention atomics offer better scalability, with high contention, locks offer
+    better contention avoidance(see Java Concurrency in Practise, page 201).  
+
+# OS:   Linux; 4.4.0-45-generic; amd64
+# JVM:  Oracle Corporation; 1.8.0_111
+# CPU:  null; 4 "cores"
+# Date: 2016-11-16T22:05:28+0100
+LockingRandom      1              16719.6 us     476.29         16
+CasRandom          1              17169.0 us     779.07         16
+TLLockingRandom    1              12369.4 us    1651.91         32
+TLCasRandom        1              16468.0 us     674.07         16
+WrappedTLRandom    1               6884.6 us     500.20         64
+LockingRandom      2              49034.8 us    6277.14          8
+CasRandom          2              67686.5 us   18769.44          4
+TLLockingRandom    2               9705.2 us     825.76         32
+TLCasRandom        2              11491.8 us     613.37         32
+WrappedTLRandom    2               5452.2 us     434.45         64
+LockingRandom      3              62481.1 us    5300.51          8
+CasRandom          3              59889.7 us    6901.45          8
+TLLockingRandom    3               8614.0 us     687.76         32
+TLCasRandom        3               8908.7 us     558.59         32
+WrappedTLRandom    3               6039.9 us     790.04         64
+LockingRandom      4              53168.5 us    3837.07          8
+CasRandom          4             100161.7 us   17571.62          4
+TLLockingRandom    4               7435.7 us     617.25         32
+TLCasRandom        4               8446.8 us     399.81         32
+WrappedTLRandom    4               4542.3 us     380.91         64
+LockingRandom      5              48124.4 us    2826.59          8
+CasRandom          5              60836.2 us   11107.64          8
+TLLockingRandom    5               9487.6 us     336.04         32
+TLCasRandom        5              10827.1 us     458.17         32
+WrappedTLRandom    5               6342.3 us     527.30         64
+LockingRandom      6              46642.8 us    1963.32          8
+CasRandom          6             106286.3 us   17900.50          4
+TLLockingRandom    6               8113.3 us     410.12         32
+TLCasRandom        6              10477.6 us     827.17         32
+WrappedTLRandom    6               4876.0 us     264.90         64
+LockingRandom      7              46826.6 us    1268.56          8
+CasRandom          7             123443.5 us   11493.51          2
+TLLockingRandom    7               9055.1 us    1077.68         64
+TLCasRandom        7               9562.9 us    1260.87         32
+WrappedTLRandom    7               4530.8 us     193.36         64
+LockingRandom      8              46349.0 us     907.28          8
+CasRandom          8             126875.0 us    7828.68          4
+TLLockingRandom    8               7977.8 us     753.78         64
+TLCasRandom        8               9289.7 us    1440.55         32
+WrappedTLRandom    8               4665.8 us     422.38         64
+
+# OS:   Windows 10; 10.0; amd64
+# JVM:  Oracle Corporation; 1.8.0_101
+# CPU:  Intel64 Family 6 Model 61 Stepping 4, GenuineIntel; 4 "cores"
+# Date: 2016-11-16T22:53:47+0100
+LockingRandom      1              17433.5 us     488.11         16
+CasRandom          1              16337.6 us     666.72         16
+TLLockingRandom    1              11029.4 us     288.24         32
+TLCasRandom        1              17539.3 us     828.27         16
+WrappedTLRandom    1               8148.1 us    3315.32         64
+LockingRandom      2              55283.9 us    4329.49          8
+CasRandom          2              44985.3 us    5785.88          8
+TLLockingRandom    2               8262.6 us     832.88         32
+TLCasRandom        2              10791.4 us    1845.50         32
+WrappedTLRandom    2               4933.3 us     598.66         64
+LockingRandom      3              83397.7 us    9293.07          4
+CasRandom          3              82137.8 us    9654.28          4
+TLLockingRandom    3               9046.1 us     478.54         32
+TLCasRandom        3               9871.7 us     157.81         32
+WrappedTLRandom    3               5869.5 us    1578.18         64
+LockingRandom      4              67796.4 us    3111.61          4
+CasRandom          4              97979.4 us   20465.40          4
+TLLockingRandom    4               6439.3 us      90.89         64
+TLCasRandom        4               7952.0 us    1657.16         32
+WrappedTLRandom    4               5275.8 us     187.44         64
+LockingRandom      5              80889.9 us   16789.35          4
+CasRandom          5             102697.0 us   12294.80          4
+TLLockingRandom    5               8067.7 us    1190.96         64
+TLCasRandom        5               9106.0 us     801.51         32
+WrappedTLRandom    5               5807.5 us     819.61         64
+LockingRandom      6              81590.7 us    2377.65          4
+CasRandom          6             111364.9 us    8039.22          4
+TLLockingRandom    6               9733.2 us    1009.63         32
+TLCasRandom        6               9704.8 us    1102.37         32
+WrappedTLRandom    6               6211.4 us     784.27         64
+LockingRandom      7              67249.2 us    1190.80          4
+CasRandom          7             108064.6 us    8046.09          4
+TLLockingRandom    7               7481.7 us     742.43         64
+TLCasRandom        7               8737.9 us     997.56         64
+WrappedTLRandom    7               6181.9 us     797.15         64
+LockingRandom      8              68956.8 us     752.19          4
+CasRandom          8             111279.9 us    3884.87          4
+TLLockingRandom    8               6756.5 us     111.89         64
+TLCasRandom        8               8598.5 us     692.89         64
+WrappedTLRandom    8               5530.9 us     197.54         64

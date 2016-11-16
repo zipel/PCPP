@@ -68,7 +68,7 @@ class TestStmHistogram {
       System.out.printf("%4d: %9d%n", bin, histogram.getCount(bin));
       totalCount += histogram.getCount(bin);
     }
-    System.out.printf("      %9d%n", totalCount);
+    System.out.printf("%9d%n", totalCount);
   }
 
   public static int countFactors(int p) {
