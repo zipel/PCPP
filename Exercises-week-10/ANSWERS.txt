@@ -15,7 +15,7 @@ Exercise 10.1)
 
         transferBins: The counter changes only if its value has not been modified by other thread.
 
-    2) It produces the correct result. run javac Histogram.java CasHistogram.java TestCasHistogram.java, and then
+    2)	It produces the correct result. run javac Histogram.java CasHistogram.java TestCasHistogram.java, and then
         java TestCasHistogram
     
     3)  TestCasHistogram : 6.034559267
@@ -32,9 +32,9 @@ Exercise 10.3)
     eliminating contention entirely. From java documentation for ThreadLocalRandom, the number generator is 
     isolated to the current thread. The difference on running times between the TLLockingRandom, TLCasRandom  
     is based on the overhead of locking and the compareAndSet failed attempts to get the nextInt(). 
-    Also the difference between locks and atomics(compareAndSet operations) is expected, demonstrating the advantages and 
+    Also the difference between locks and atomics (compareAndSet operations) is expected, demonstrating the advantages and 
     drawbacks of each. With low to moderate contention atomics offer better scalability, with high contention, locks offer
-    better contention avoidance(see Java Concurrency in Practise, page 201).  
+    better contention avoidance (see Java Concurrency in Practise, page 201).  
 
 # OS:   Linux; 4.4.0-45-generic; amd64
 # JVM:  Oracle Corporation; 1.8.0_111
