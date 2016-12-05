@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------
 Note:The hand-in in group 8 is identical to that in group 70, because of collaboration.
 ---------------------------------------------------------------------------------------
+Answers:
+        A) See ABC.java
 
+        B) If we replace Deposit message with {Inspect, Balance, Set} messages
+            there is a change that the returned value of the Balance message 
+            has been invalidated by another Set message, yielding unexpteced results.
