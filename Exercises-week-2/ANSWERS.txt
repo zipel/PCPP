@@ -95,4 +95,4 @@ Exercise 2.4
 			Explanation: The computation takes place only when key is absent,
 			locking the key -> value reference at the very beginning when the
 			check takes place. Thus, only the threads that lookup the given 
-			key will be synchronized minimizing the time needed  and  calls to factorizer.
+			key will be synchronized minimizing the time needed and calls to factorizer.
